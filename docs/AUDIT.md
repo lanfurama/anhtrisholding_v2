@@ -68,11 +68,34 @@ Trạng thái: ✅ đã làm · ➖ không làm (có lý do)
 - `npm run lint`, `npm run typecheck`: sạch.
 - `npm test` (Vitest): 52 test — kiểm tra form/số điện thoại, giới hạn tần suất, Server Action (lưu Sanity, email dự phòng,
   honeypot, chặn spam), email Resend, redirect URL cũ, tính toàn vẹn nội dung mặc định (slug, tham chiếu, giới hạn SEO, alt ảnh).
-- `npm run build` + `npm run smoke`: 35 kiểm tra trên bản production — status các trang, 404 có `noindex` và header/footer,
+- `npm run build` + `npm run smoke`: 41 kiểm tra trên bản production — status các trang, 404 có `noindex` và header/footer,
   redirect 308, security header, JSON-LD, nội dung mặc định không còn trong JS client.
 - Trình duyệt (Chromium, 1440px/390px): form đưa focus tới ô lỗi, nhận `+84 853 748 898`; giỏ báo giá đồng bộ giữa hai tab;
   không lỗi JS.
 - CI: `.github/workflows/ci.yml` chạy lint → typecheck → test → build → smoke cho mỗi push lên `main` và mỗi PR.
+
+## Vòng 2 — favicon, UX/UI, responsive (30.09.2026)
+
+Cách kiểm tra: đo tự động 8 trang × 13 kích thước màn hình (320×568, 360×740, 390×844, 430×932, 844×390 xoay ngang,
+768×1024, 820×1180, 960×600, 1024×768, 1280×800, 1440×900, 1920×1080, 2560×1440) — tràn ngang, phần tử lọt khỏi màn hình,
+vùng chạm, cỡ chữ ô nhập (iOS tự zoom khi < 16px), lỗi JS; thêm kiểm tra cuộn từng bước cho thẻ sticky và thao tác chạm thật.
+
+| # | Mức | Phát hiện | Hành động | TT |
+| --- | --- | --- | --- | --- |
+| U1 | Cao | Favicon vẫn là icon mặc định của Next.js/Vercel; không có icon cho iOS/Android, không có web manifest. | Icon "AT" dựng từ font Geist của site (A trắng, T cam, nền tím): `icon.svg`, `favicon.ico` 16/32/48, `apple-icon.png` 180, icon 192/512 + maskable, `manifest.webmanifest`. | ✅ |
+| U2 | Cao | Trang Hệ sinh thái trên điện thoại (360–390px, và khi xoay ngang): thẻ thành viên dính (sticky) cao hơn màn hình nên thẻ sau che mất danh sách dịch vụ và nút CTA của thẻ trước — không bao giờ bấm được. | Chỉ xếp chồng khi màn hình đủ cao (≥1024×700 hoặc ≥768×900); vị trí xếp chồng chuyển sang biến CSS. Đã kiểm tra: mọi nút CTA bấm được ở mọi kích thước. | ✅ |
+| U3 | Cao | Chữ "ANHTRIS" ở hero bị cắt mất chữ S trên màn hình 320–380px (gồm 360px — độ rộng Android phổ biến nhất): cỡ chữ tối thiểu 84px rộng hơn màn hình. | Giới hạn cỡ chữ theo bề ngang khả dụng (đơn vị container `cqi`, có dòng dự phòng); từ 390px trở lên giữ nguyên như thiết kế. | ✅ |
+| U4 | TB | Menu mobile khi xoay ngang: nút "Gọi hotline" bị flexbox ép còn 21px, chữ menu 44px chỉ thấy được 3 mục. | Không cho mục menu co lại; màn hình thấp dùng chữ 28px — thấy đủ 5 mục. | ✅ |
+| U5 | TB | Khối "gom nhà cung ứng" chọn kiểu tương tác theo độ rộng (≥960px = rê chuột): iPad ngang / laptop cảm ứng chạm không phản hồi. | Chọn theo khả năng hover của thiết bị (`hover: hover` + `pointer: fine`). | ✅ |
+| U6 | TB | 836–1100px (iPad ngang): cột phải có 2 nút xuống dòng nên tiêu đề hero (canh đáy) bị đẩy xuống, lệch với đoạn giới thiệu. | Canh trên ở khoảng này; màn lớn giữ canh đáy như thiết kế. | ✅ |
+| U7 | TB | Vùng chạm nhỏ: link footer cao 18px, breadcrumb 16px, link "Xem tất cả →" 21px, email ở trang Liên hệ 19px. | Nới vùng chạm lên 28–33px bằng padding + margin âm (bố cục không đổi). | ✅ |
+| U8 | Thấp | Nhảy tới `#anchor` (vd. mục trong bài viết) bị header cố định che tiêu đề. | `scroll-margin-top` cho mọi phần tử có `id`. | ✅ |
+| U9 | Thấp | Hiệu ứng phóng ảnh khi hover bị "kẹt" trên màn hình cảm ứng sau khi chạm. | Chỉ áp dụng khi thiết bị có hover. | ✅ |
+| U10 | Thấp | Trình duyệt ở chế độ tối có thể tự "làm tối" trang; chạm vào link hiện ô xám mặc định. | `color-scheme: only light`; màu nhấn khi chạm theo tông tím. | ✅ |
+| U11 | Thấp | Gửi form thành công: form biến mất, focus bị mất; bộ lọc sản phẩm khai báo `toolbar` nhưng không điều hướng bằng phím mũi tên. | Focus chuyển tới thông báo đã gửi; bộ lọc dùng `role="group"`. | ✅ |
+
+Kết quả: 104 tổ hợp trang × màn hình không tràn ngang, không có phần tử lọt khỏi màn hình, không lỗi JS; ô nhập đều ≥16px;
+vùng chạm đều ≥24px (còn lại duy nhất ô bẫy spam ẩn). Smoke test kiểm tra thêm favicon, icon và manifest.
 
 ## Đề xuất tiếp theo
 

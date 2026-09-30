@@ -120,3 +120,6 @@ scripts/smoke.mjs      smoke test bản production
   ảnh Steak House The Fan và Furama, tên pháp nhân + MST (footer chỉ hiện khi đã nhập), file catalogue PDF, link mạng xã hội.
 - Security header (nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, HSTS) và giới hạn nguồn ảnh cho image optimizer
   cấu hình trong `next.config.ts`.
+- Favicon và icon: `src/app/icon.svg` (vector), `src/app/favicon.ico` (16/32/48), `src/app/apple-icon.png` (iOS),
+  `public/icons/*` + `src/app/manifest.ts` (Android). Đổi icon thì thay các file này, giữ nguyên tên.
+- Đã kiểm tra hiển thị từ 320px đến 2560px, cả điện thoại xoay ngang và iPad (xem `docs/AUDIT.md`, mục Vòng 2).
