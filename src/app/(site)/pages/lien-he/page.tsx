@@ -6,11 +6,14 @@ import { getMembers, getSettings } from "@/lib/content";
 import { ROUTES } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Liên hệ & yêu cầu báo giá | AnhTris Holdings",
-  description: "Gửi yêu cầu báo giá tableware, linen, amenities. Showroom tại sảnh Furama Đà Nẵng, hotline 0853 748 898.",
-  path: ROUTES.contact,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { phone } = await getSettings();
+  return pageMetadata({
+    title: "Liên hệ & yêu cầu báo giá | AnhTris Holdings",
+    description: `Gửi yêu cầu báo giá tableware, linen, amenities. Showroom tại sảnh Furama Đà Nẵng, hotline ${phone}.`,
+    path: ROUTES.contact,
+  });
+}
 
 export default async function ContactPage() {
   const [settings, members] = await Promise.all([getSettings(), getMembers()]);

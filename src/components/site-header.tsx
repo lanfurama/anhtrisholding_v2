@@ -4,8 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LOGO_URL } from "@/lib/fallback";
-import { NAV, navKeyFor } from "@/lib/routes";
+import { NAV, navKeyFor, ROUTES } from "@/lib/routes";
 import { reducedMotion, useSite } from "./providers";
 import s from "./site-header.module.css";
 
@@ -19,7 +18,9 @@ const spring = (w: number, z: number) => {
   return (t: number) => 1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + ((z * w) / wd) * Math.sin(wd * t));
 };
 
-export function SiteHeader({ phone, phoneE164 }: { phone: string; phoneE164: string }) {
+type Props = { logo: { url: string; alt: string }; phone: string; phoneE164: string };
+
+export function SiteHeader({ logo, phone, phoneE164 }: Props) {
   const pathname = usePathname();
   const active = navKeyFor(pathname);
   const { quote } = useSite();
@@ -132,8 +133,8 @@ export function SiteHeader({ phone, phoneE164 }: { phone: string; phoneE164: str
     <>
       <header className={s.header}>
         <div className={s.bar}>
-          <Link href="/" className={s.logo} aria-label="AnhTris Holdings — Trang chủ" onClick={() => setMenuFor(null)}>
-            <Image src={LOGO_URL} alt="AnhTris Holdings" width={145} height={36} loading="eager" className={s.logoImg} />
+          <Link href="/" className={s.logo} aria-label={`${logo.alt} — Trang chủ`} onClick={() => setMenuFor(null)}>
+            <Image src={logo.url} alt={logo.alt} width={145} height={36} loading="eager" className={s.logoImg} />
           </Link>
 
           <nav ref={navRef} className={s.nav} aria-label="Điều hướng chính">
@@ -163,7 +164,7 @@ export function SiteHeader({ phone, phoneE164 }: { phone: string; phoneE164: str
 
           <span className={s.spacer} />
 
-          <Link href="/pages/lien-he" data-quote-btn="1" className={s.quoteBtn} onClick={() => setMenuFor(null)}>
+          <Link href={ROUTES.contact} data-quote-btn="1" className={s.quoteBtn} onClick={() => setMenuFor(null)}>
             <span className={s.quoteLong}>Yêu cầu báo giá</span>
             <span className={s.quoteShort}>Báo giá</span>
             {count > 0 && (

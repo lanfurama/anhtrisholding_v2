@@ -49,6 +49,10 @@ export const linkObject = (name: string, title: string) =>
         title: "Đường dẫn",
         type: "string",
         description: "Đường dẫn nội bộ, ví dụ /collections/all hoặc /pages/lien-he",
+        validation: (r) =>
+          r.custom<string>(
+            (v) => !v || /^(\/|#|https:\/\/|tel:|mailto:)/.test(v) || "Bắt đầu bằng /, #, https://, tel: hoặc mailto:",
+          ),
       }),
     ],
   });

@@ -6,11 +6,13 @@ import { getProjects } from "@/lib/content";
 import { ROUTES } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Dự án khách sạn, nhà hàng đã triển khai | AnhTris",
-  description: "Các dự án cung ứng HORECA của AnhTris Holdings cho resort, khách sạn và nhà hàng fine dining.",
-  path: ROUTES.projects,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    title: "Dự án khách sạn, nhà hàng đã triển khai | AnhTris",
+    description: "Các dự án cung ứng HORECA của AnhTris Holdings cho resort, khách sạn và nhà hàng fine dining.",
+    path: ROUTES.projects,
+  });
+}
 
 export default async function ProjectsPage() {
   const projects = await getProjects();

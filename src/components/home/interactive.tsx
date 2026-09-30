@@ -65,7 +65,7 @@ export function FaqList({ items }: { items: Faq[] }) {
       {items.map((q, i) => {
         const on = open === i;
         return (
-          <div key={q.question} className={h.faqItem}>
+          <div key={i} className={h.faqItem}>
             <button
               type="button"
               className={h.faqQ}

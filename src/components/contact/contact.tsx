@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, useTransition, type ChangeEvent, type FormEvent } from "react";
 import { submitQuote } from "@/app/actions";
 import { validateQuote, type QuoteErrors, type QuoteFields } from "@/lib/quote";
 import { ROUTES } from "@/lib/routes";
@@ -49,6 +49,13 @@ export function QuoteForm({ interests }: { interests: string[] }) {
   const [attempt, setAttempt] = useState(0);
   const [sent, setSent] = useState<QuoteFields | null>(null);
   const [pending, start] = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
+  // Tăng mỗi lần có lỗi mới → đưa focus tới ô lỗi đầu tiên (không nhảy focus khi người dùng đang sửa)
+  const [focusErr, setFocusErr] = useState(0);
+
+  useEffect(() => {
+    if (focusErr) formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  }, [focusErr]);
 
   const set = (k: keyof QuoteFields) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setF({ ...f, [k]: e.target.value });
@@ -60,13 +67,20 @@ export function QuoteForm({ interests }: { interests: string[] }) {
     const website = String(new FormData(e.currentTarget).get("website") || "");
     const local = validateQuote(f);
     setAttempt((n) => n + 1);
-    if (Object.keys(local).length) return setErr(local);
+    if (Object.keys(local).length) {
+      setErr(local);
+      setFocusErr((n) => n + 1);
+      return;
+    }
     start(async () => {
       const r = await submitQuote({ ...f, interest, items: quote.map((q) => q.name), website });
       if (r.ok) {
         setErr({});
         setSent(f);
-      } else setErr(r.errors);
+      } else {
+        setErr(r.errors);
+        setFocusErr((n) => n + 1);
+      }
     });
   };
 
@@ -109,7 +123,7 @@ export function QuoteForm({ interests }: { interests: string[] }) {
     );
 
   return (
-    <form className={c.form} onSubmit={onSubmit} noValidate>
+    <form ref={formRef} className={c.form} onSubmit={onSubmit} noValidate>
       <fieldset className={c.interests}>
         <legend className={c.legend}>Bạn quan tâm đến</legend>
         <div className={c.chips}>
@@ -124,12 +138,28 @@ export function QuoteForm({ interests }: { interests: string[] }) {
       <div className={c.fields}>
         <label className={c.label}>
           Họ tên *
-          <input className={c.input} value={f.name} onChange={set("name")} placeholder="Nguyễn Văn A" autoComplete="name" required {...field("name")} />
+          <input
+            className={c.input}
+            value={f.name}
+            onChange={set("name")}
+            placeholder="Nguyễn Văn A"
+            autoComplete="name"
+            maxLength={120}
+            required
+            {...field("name")}
+          />
           {error("name")}
         </label>
         <label className={c.label}>
           Đơn vị
-          <input className={c.input} value={f.company} onChange={set("company")} placeholder="Khách sạn / nhà hàng" autoComplete="organization" />
+          <input
+            className={c.input}
+            value={f.company}
+            onChange={set("company")}
+            placeholder="Khách sạn / nhà hàng"
+            autoComplete="organization"
+            maxLength={160}
+          />
         </label>
         <label className={c.label}>
           Số điện thoại *
@@ -141,6 +171,7 @@ export function QuoteForm({ interests }: { interests: string[] }) {
             inputMode="tel"
             placeholder="09xx xxx xxx"
             autoComplete="tel"
+            maxLength={24}
             required
             {...field("phone")}
           />
@@ -156,6 +187,7 @@ export function QuoteForm({ interests }: { interests: string[] }) {
             inputMode="email"
             placeholder="ban@congty.vn"
             autoComplete="email"
+            maxLength={160}
             {...field("email")}
           />
           {error("email")}
@@ -169,6 +201,7 @@ export function QuoteForm({ interests }: { interests: string[] }) {
           value={f.msg}
           onChange={set("msg")}
           rows={4}
+          maxLength={3000}
           placeholder="Quy mô dự án, số phòng / số khách, thời gian khai trương, yêu cầu dập logo…"
         />
       </label>

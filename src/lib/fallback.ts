@@ -4,12 +4,10 @@
  * - `scripts/seed.ts` đẩy chính dữ liệu này lên Sanity để biên tập tiếp.
  */
 import type { PortableTextBlock } from "next-sanity";
+import { DEFAULT_PHONE, DEFAULT_PHONE_E164, HARAVAN_STORE_ID, HSTATIC_THEME as CDN, LOGO_URL, SITE_NAME } from "./brand";
 import type { Category, HomePage, Member, Post, Product, Project, SiteSettings } from "./types";
 
-const CDN = "https://cdn.hstatic.net/themes/200001050639/1001402692/14/";
-const ARTICLE_IMG = "https://cdn.hstatic.net/files/200001050639/article/";
-
-export const LOGO_URL = CDN + "logo.png";
+const ARTICLE_IMG = `https://cdn.hstatic.net/files/${HARAVAN_STORE_ID}/article/`;
 
 const img = (url: string, alt: string) => ({ url, alt });
 
@@ -21,8 +19,8 @@ const LOGOS = {
 
 export const fallbackSettings: SiteSettings = {
   title: "AnhTris Holdings",
-  phone: "0853 748 898",
-  phoneE164: "+84853748898",
+  phone: DEFAULT_PHONE,
+  phoneE164: DEFAULT_PHONE_E164,
   email: "sales@anhtrisholdings.com",
   showroomName: "Showroom AnhTris Holdings",
   address: "Gian hàng số 2, Khu vực sảnh Khách sạn Furama Đà Nẵng, 103–105 Võ Nguyên Giáp, P. Ngũ Hành Sơn, Tp. Đà Nẵng",
@@ -34,6 +32,10 @@ export const fallbackSettings: SiteSettings = {
   authorBio:
     "Thành viên của AnhTris Holdings, cung cấp giải pháp HORECA — tableware, linen, amenities — cho khách sạn, resort và nhà hàng. Showroom tại sảnh Furama Resort Đà Nẵng.",
   authorImage: img(LOGOS.maiahorecare, "Logo Maiahorecare"),
+  logo: img(LOGO_URL, SITE_NAME),
+  // Ảnh chia sẻ Facebook của site cũ
+  ogImage: img(CDN + "share_fb_home.png?v=271", "AnhTris Holdings — giải pháp HORECA trọn gói"),
+  socialLinks: [],
 };
 
 export const fallbackMembers: Member[] = [
@@ -598,6 +600,7 @@ export const fallbackPosts: Post[] = POSTS.map((p) => ({
   slug: p.slug,
   category: p.cat,
   publishedAt: p.date,
+  updatedAt: p.date,
   excerpt: p.lede,
   coverImage: img(ARTICLE_IMG + p.img, p.alt),
   quickAnswer: p.quick,

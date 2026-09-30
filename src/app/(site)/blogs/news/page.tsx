@@ -6,11 +6,13 @@ import { getPosts } from "@/lib/content";
 import { ROUTES } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Cẩm nang HORECA — kinh nghiệm setup khách sạn, nhà hàng | AnhTris",
-  description: "Kinh nghiệm chọn tableware, linen, amenities và bài trí bàn tiệc từ đội ngũ tư vấn Maiahorecare — AnhTris Holdings.",
-  path: ROUTES.blog,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    title: "Cẩm nang HORECA — kinh nghiệm setup khách sạn, nhà hàng | AnhTris",
+    description: "Kinh nghiệm chọn tableware, linen, amenities và bài trí bàn tiệc từ đội ngũ tư vấn Maiahorecare — AnhTris Holdings.",
+    path: ROUTES.blog,
+  });
+}
 
 export default async function BlogPage() {
   const posts = await getPosts();

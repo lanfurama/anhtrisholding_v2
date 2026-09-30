@@ -14,12 +14,14 @@ import { getCategories, getHome, getMembers, getPosts, getSettings } from "@/lib
 import { categoryPath, ROUTES } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "AnhTris Holdings — Cung ứng HORECA trọn gói tại Đà Nẵng",
-  description:
-    "Maiahorecare, Maiahome và Tris Gallery: tableware, linen, amenities và nội thất cho khách sạn, resort, nhà hàng. Showroom tại sảnh Furama Đà Nẵng.",
-  path: "/",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    title: "AnhTris Holdings — Cung ứng HORECA trọn gói tại Đà Nẵng",
+    description:
+      "Maiahorecare, Maiahome và Tris Gallery: tableware, linen, amenities và nội thất cho khách sạn, resort, nhà hàng. Showroom tại sảnh Furama Đà Nẵng.",
+    path: "/",
+  });
+}
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -67,7 +69,7 @@ export default async function HomePage() {
                 <Image src={home.heroImage.url} alt={home.heroImage.alt} fill preload sizes="(max-width: 1280px) 100vw, 1200px" />
               </Parallax>
               <div className={h.heroShade} />
-              {home.heroBadge && (
+              {home.heroBadge?.title && (
                 <div className={h.badge}>
                   <span className={h.badgeMark} aria-hidden="true">
                     {home.heroBadge.mark || home.heroBadge.title.charAt(0)}
@@ -178,7 +180,7 @@ export default async function HomePage() {
             <ProcessLine />
             <ol className={h.stepGrid}>
               {home.steps.map((st, i) => (
-                <li key={st.title} className={h.step}>
+                <li key={i} className={h.step}>
                   <span className={h.stepNum}>{pad(i + 1)}</span>
                   <span className={h.stepTitle}>{st.title}</span>
                   <span className={h.stepText}>{st.text}</span>

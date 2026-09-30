@@ -2,10 +2,13 @@ import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
 
+/** Document type không hiển thị trên site — không cần làm mới cache. */
+const IGNORED_TYPES = new Set(["quoteRequest"]);
+
 /**
  * Webhook Sanity → làm mới cache theo document type.
  * Cấu hình ở sanity.io/manage → API → Webhooks:
- *   URL: https://<domain>/api/revalidate · Projection: {_type} · Secret: SANITY_REVALIDATE_SECRET
+ *   URL: https://<domain>/api/revalidate · Filter: _type != "quoteRequest" · Projection: {_type} · Secret: SANITY_REVALIDATE_SECRET
  */
 export async function POST(req: NextRequest) {
   const secret = process.env.SANITY_REVALIDATE_SECRET;
@@ -14,6 +17,7 @@ export async function POST(req: NextRequest) {
   const { isValidSignature, body } = await parseBody<{ _type?: string }>(req, secret);
   if (!isValidSignature) return new NextResponse("Invalid signature", { status: 401 });
   if (!body?._type) return new NextResponse("Bad request", { status: 400 });
+  if (IGNORED_TYPES.has(body._type)) return NextResponse.json({ skipped: body._type });
 
   revalidateTag(body._type, "max");
   return NextResponse.json({ revalidated: body._type });

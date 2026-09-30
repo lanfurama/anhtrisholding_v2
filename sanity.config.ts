@@ -9,6 +9,8 @@ import { structure } from "./src/sanity/structure";
 
 const singletonTypes = new Set<string>(SINGLETONS);
 const singletonActions = new Set(["publish", "discardChanges", "restore"]);
+// Yêu cầu báo giá chỉ đến từ form liên hệ — không tạo tay trong Studio
+const noCreateTypes = new Set<string>([...SINGLETONS, "quoteRequest"]);
 
 export default defineConfig({
   name: "anhtris",
@@ -18,8 +20,8 @@ export default defineConfig({
   dataset,
   schema: {
     types: schemaTypes,
-    // Singleton không xuất hiện trong menu "Tạo mới"
-    templates: (templates) => templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
+    // Singleton và yêu cầu báo giá không xuất hiện trong menu "Tạo mới"
+    templates: (templates) => templates.filter(({ schemaType }) => !noCreateTypes.has(schemaType)),
   },
   document: {
     actions: (input, context) =>

@@ -9,6 +9,7 @@ export type Img = {
 
 export type Link = { label: string; href: string };
 export type Faq = { question: string; answer: string };
+export type SocialLink = { label: string; url: string };
 
 export type SiteSettings = {
   title: string;
@@ -24,6 +25,9 @@ export type SiteSettings = {
   authorName: string;
   authorBio: string;
   authorImage: Img;
+  logo: Img;
+  ogImage: Img;
+  socialLinks: SocialLink[];
 };
 
 export type Member = {
@@ -94,6 +98,8 @@ export type PostCard = {
   slug: string;
   category: string;
   publishedAt: string;
+  /** `_updatedAt` của Sanity — ngày sửa gần nhất (dateModified, sitemap) */
+  updatedAt: string | null;
   excerpt: string;
   coverImage: Img;
 };

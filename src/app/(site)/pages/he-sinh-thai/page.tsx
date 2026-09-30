@@ -7,11 +7,13 @@ import { getMembers } from "@/lib/content";
 import { ROUTES } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Hệ sinh thái Maiahorecare, Maiahome, Tris Gallery | AnhTris",
-  description: "Ba thương hiệu thành viên của AnhTris Holdings: giải pháp HORECA, thiết kế không gian sống và tranh nghệ thuật độc bản.",
-  path: ROUTES.eco,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    title: "Hệ sinh thái Maiahorecare, Maiahome, Tris Gallery | AnhTris",
+    description: "Ba thương hiệu thành viên của AnhTris Holdings: giải pháp HORECA, thiết kế không gian sống và tranh nghệ thuật độc bản.",
+    path: ROUTES.eco,
+  });
+}
 
 const CTA_CLASS = { dark: "btnAccent", light: "btnPrimary", accent: "btnInk" } as const;
 
@@ -44,8 +46,8 @@ export default async function EcosystemPage() {
               <p className={p.memberDesc}>{m.description || m.summary}</p>
             </div>
             <div className={p.services}>
-              {m.services.map((sv) => (
-                <div key={sv.title} className={p.service}>
+              {m.services.map((sv, j) => (
+                <div key={j} className={p.service}>
                   <span className={p.serviceTitle}>{sv.title}</span>
                   <span className={p.serviceText}>{sv.text}</span>
                 </div>

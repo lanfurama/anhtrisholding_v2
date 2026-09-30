@@ -161,6 +161,9 @@ async function main() {
     authorName: s.authorName,
     authorBio: s.authorBio,
     authorImage: await image(s.authorImage),
+    // Logo và ảnh chia sẻ chuyển hẳn lên Sanity — không còn phụ thuộc CDN Haravan
+    logo: await image(s.logo),
+    ogImage: await image(s.ogImage),
   });
 
   const tx = client.transaction();

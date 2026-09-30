@@ -7,11 +7,13 @@ import { getCategories, getProducts, getSettings } from "@/lib/content";
 import { ROUTES } from "@/lib/routes";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Sản phẩm HORECA: tableware, linen, amenities | AnhTris",
-  description: "Chén dĩa sứ, dao nĩa, linen, amenities, nội thất và sản phẩm xanh cho khách sạn, nhà hàng. Nhận dập logo, báo giá trong 24 giờ.",
-  path: ROUTES.products,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    title: "Sản phẩm HORECA: tableware, linen, amenities | AnhTris",
+    description: "Chén dĩa sứ, dao nĩa, linen, amenities, nội thất và sản phẩm xanh cho khách sạn, nhà hàng. Nhận dập logo, báo giá trong 24 giờ.",
+    path: ROUTES.products,
+  });
+}
 
 export default async function ProductsPage() {
   const [categories, products, settings] = await Promise.all([getCategories(), getProducts(), getSettings()]);

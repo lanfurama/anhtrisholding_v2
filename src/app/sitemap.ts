@@ -12,6 +12,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
   return [
     ...pages,
-    ...posts.map((p) => ({ url: siteUrl + postPath(p.slug), lastModified: p.publishedAt, changeFrequency: "monthly" as const, priority: 0.6 })),
+    ...posts.map((p) => ({
+      url: siteUrl + postPath(p.slug),
+      lastModified: p.updatedAt || p.publishedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ];
 }

@@ -41,7 +41,7 @@ export function Toc({ headings }: { headings: string[] }) {
     <nav aria-label="Mục lục" className={a.toc}>
       <span className={a.asideLabel}>Mục lục</span>
       {headings.map((h, i) => (
-        <button key={h} type="button" className={a.tocItem} aria-current={active === i ? "location" : undefined} onClick={() => go(i)}>
+        <button key={i} type="button" className={a.tocItem} aria-current={active === i ? "location" : undefined} onClick={() => go(i)}>
           <span className={a.tocNum}>{String(i + 1).padStart(2, "0")}</span>
           <span>{h}</span>
         </button>

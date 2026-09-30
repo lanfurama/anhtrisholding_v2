@@ -34,11 +34,16 @@ export function SiteProviders({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<{ text: string; id: number } | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  // Khôi phục giỏ báo giá sau hydrate (localStorage không có ở server).
+  // Khôi phục giỏ báo giá sau hydrate (localStorage không có ở server) và đồng bộ khi tab khác thay đổi giỏ.
   useEffect(() => {
     const saved = readSaved();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved.length) setQuoteState(saved);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY || e.key === null) setQuoteState(readSaved());
+    };
+    addEventListener("storage", onStorage);
+    return () => removeEventListener("storage", onStorage);
   }, []);
 
   const setQuote = useCallback((q: QuoteItem[]) => {

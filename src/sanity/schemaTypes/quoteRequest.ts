@@ -1,24 +1,26 @@
 import { defineField, defineType } from "sanity";
 
+export const QUOTE_STATUSES = [
+  { title: "Mới", value: "new" },
+  { title: "Đã liên hệ", value: "contacted" },
+  { title: "Hoàn tất", value: "done" },
+] as const;
+
 export const quoteRequest = defineType({
   name: "quoteRequest",
   title: "Yêu cầu báo giá",
   type: "document",
+  // Đổi trạng thái / ghi chú là lưu ngay, không cần bấm Publish
+  liveEdit: true,
   fields: [
     defineField({
       name: "status",
       title: "Trạng thái",
       type: "string",
-      options: {
-        list: [
-          { title: "Mới", value: "new" },
-          { title: "Đã liên hệ", value: "contacted" },
-          { title: "Hoàn tất", value: "done" },
-        ],
-        layout: "radio",
-      },
+      options: { list: [...QUOTE_STATUSES], layout: "radio" },
       initialValue: "new",
     }),
+    defineField({ name: "note", title: "Ghi chú nội bộ", type: "text", rows: 3, description: "Chỉ đội kinh doanh thấy — ví dụ đã gọi lúc nào, báo giá số mấy." }),
     defineField({ name: "name", title: "Họ tên", type: "string", readOnly: true }),
     defineField({ name: "company", title: "Đơn vị", type: "string", readOnly: true }),
     defineField({ name: "phone", title: "Số điện thoại", type: "string", readOnly: true }),

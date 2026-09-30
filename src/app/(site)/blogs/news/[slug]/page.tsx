@@ -10,9 +10,8 @@ import { JsonLd } from "@/components/json-ld";
 import { PageTransition } from "@/components/page-transition";
 import { PostCard } from "@/components/post-card";
 import { getPost, getPosts, getPostSlugs, getSettings } from "@/lib/content";
-import { LOGO_URL } from "@/lib/fallback";
 import { categoryPath, formatDate, postPath, ROUTES } from "@/lib/routes";
-import { ORG_ID, SITE_NAME, WEBSITE_ID } from "@/lib/seo";
+import { defaultShareImage, ORG_ID, SITE_NAME, WEBSITE_ID } from "@/lib/seo";
 import type { Post } from "@/lib/types";
 import { siteUrl } from "@/sanity/env";
 
@@ -25,10 +24,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) return {};
+  // Gọi notFound() ngay tại đây để cả HTML lẫn payload phía client dùng metadata của (site)/not-found.tsx (noindex)
+  if (!post) notFound();
   const title = post.seo?.title || post.title;
   const description = post.seo?.description || post.excerpt;
-  const image = post.coverImage ?? { url: LOGO_URL, alt: SITE_NAME };
+  const image = post.coverImage ?? (await defaultShareImage());
   return {
     title: { absolute: title },
     description,
@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: SITE_NAME,
       locale: "vi_VN",
       publishedTime: post.publishedAt,
-      modifiedTime: post.publishedAt,
+      modifiedTime: post.updatedAt || post.publishedAt,
       section: post.category,
       authors: ["Maiahorecare"],
       images: [{ url: image.url, alt: image.alt }],
@@ -103,7 +103,7 @@ export default async function ArticlePage({ params }: Props) {
         description: post.seo?.description || post.excerpt,
         ...(img && { image: [img.url] }),
         datePublished: post.publishedAt,
-        dateModified: post.publishedAt,
+        dateModified: post.updatedAt || post.publishedAt,
         inLanguage: "vi-VN",
         articleSection: post.category,
         keywords: post.seo?.keywords || undefined,
@@ -214,8 +214,8 @@ export default async function ArticlePage({ params }: Props) {
               <div className={a.prods}>
                 <span className={a.kicker}>Sản phẩm nhắc đến trong bài</span>
                 <div className={a.chips}>
-                  {post.relatedProducts.map((pr) => (
-                    <Link key={pr.label} href={categoryPath(pr.categorySlug)} className="chip">
+                  {post.relatedProducts.map((pr, i) => (
+                    <Link key={i} href={categoryPath(pr.categorySlug)} className="chip">
                       {pr.label} →
                     </Link>
                   ))}
@@ -226,8 +226,8 @@ export default async function ArticlePage({ params }: Props) {
             {post.keyTakeaways.length > 0 && (
               <div className={a.keys}>
                 <span className={a.kicker}>Ghi nhớ nhanh</span>
-                {post.keyTakeaways.map((k) => (
-                  <div key={k} className={a.key}>
+                {post.keyTakeaways.map((k, i) => (
+                  <div key={i} className={a.key}>
                     <span className={a.keyMark} aria-hidden="true">
                       ✓
                     </span>
@@ -242,8 +242,8 @@ export default async function ArticlePage({ params }: Props) {
                 <h2 id="faq-title" className={a.faqTitle}>
                   Câu hỏi thường gặp
                 </h2>
-                {post.faq.map((f) => (
-                  <div key={f.question} className={a.faqItem}>
+                {post.faq.map((f, i) => (
+                  <div key={i} className={a.faqItem}>
                     <h3 className={a.faqQ}>{f.question}</h3>
                     <p className={a.faqA}>{f.answer}</p>
                   </div>

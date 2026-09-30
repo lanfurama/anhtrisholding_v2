@@ -92,8 +92,8 @@ export function EcosystemOrbit({ members }: { members: Member[] }) {
             <h3 className={o.name}>{m.name}</h3>
             <p className={o.desc}>{m.summary}</p>
             <div className={o.items}>
-              {m.highlights.map((it) => (
-                <span key={it} className={o.item}>
+              {m.highlights.map((it, i) => (
+                <span key={i} className={o.item}>
                   {it}
                 </span>
               ))}

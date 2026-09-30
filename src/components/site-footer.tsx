@@ -28,6 +28,11 @@ export function SiteFooter({ settings, members }: { settings: SiteSettings; memb
               {settings.phone}
             </a>
             <a href={`mailto:${settings.email}`}>{settings.email}</a>
+            {settings.socialLinks.map((sl) => (
+              <a key={sl.url} href={sl.url} target="_blank" rel="noopener noreferrer">
+                {sl.label}
+              </a>
+            ))}
           </div>
           <div className={s.col}>
             <span className={s.colTitle}>Thành viên</span>
@@ -41,6 +46,7 @@ export function SiteFooter({ settings, members }: { settings: SiteSettings; memb
             <span className={s.colTitle}>Khám phá</span>
             <Link href={ROUTES.products}>Sản phẩm &amp; catalogue</Link>
             <Link href={ROUTES.projects}>Dự án</Link>
+            <Link href={ROUTES.blog}>Cẩm nang HORECA</Link>
             <Link href={ROUTES.contact}>Báo giá</Link>
           </div>
         </div>

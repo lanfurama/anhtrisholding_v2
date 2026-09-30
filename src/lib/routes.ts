@@ -25,7 +25,8 @@ export const postPath = (slug: string) => `${ROUTES.blog}/${slug}`;
 export const categoryPath = (slug?: string | null) => (slug ? `${ROUTES.products}?cat=${encodeURIComponent(slug)}` : ROUTES.products);
 
 /** "2026-09-21" → "21.09.2026" (định dạng ngày trong bản thiết kế) */
-export const formatDate = (iso: string) => {
+export const formatDate = (iso: string | null | undefined) => {
+  if (!iso) return "";
   const [y, m, d] = iso.slice(0, 10).split("-");
   return `${d}.${m}.${y}`;
 };

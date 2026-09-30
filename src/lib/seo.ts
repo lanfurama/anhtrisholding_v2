@@ -1,17 +1,26 @@
 import type { Metadata } from "next";
 import { siteUrl } from "@/sanity/env";
-import { LOGO_URL } from "./fallback";
+import { LOGO_URL, SITE_NAME } from "./brand";
+import { getSettings } from "./content";
 import type { Member, SiteSettings } from "./types";
 
-export const SITE_NAME = "AnhTris Holdings";
+export { SITE_NAME };
 export const ORG_ID = `${siteUrl}/#org`;
 export const WEBSITE_ID = `${siteUrl}/#website`;
 
-type PageSeo = { title: string; description: string; path: string; image?: { url: string; alt: string } | null };
+type ShareImage = { url: string; alt: string };
+type PageSeo = { title: string; description: string; path: string; image?: ShareImage | null };
+
+/** Ảnh Open Graph cho trang không có ảnh riêng: ảnh chia sẻ trong "Thông tin chung" → logo. */
+export async function defaultShareImage(): Promise<ShareImage> {
+  const s = await getSettings();
+  const img = s.ogImage ?? s.logo;
+  return { url: img?.url || LOGO_URL, alt: img?.alt || SITE_NAME };
+}
 
 /** Title/description/canonical/OG/Twitter cho một trang tĩnh. */
-export function pageMetadata({ title, description, path, image }: PageSeo): Metadata {
-  const img = image ?? { url: LOGO_URL, alt: SITE_NAME };
+export async function pageMetadata({ title, description, path, image }: PageSeo): Promise<Metadata> {
+  const img = image ?? (await defaultShareImage());
   return {
     title: { absolute: title },
     description,
@@ -30,6 +39,7 @@ export function pageMetadata({ title, description, path, image }: PageSeo): Meta
 }
 
 export function organizationGraph(settings: SiteSettings, members: Member[]) {
+  const sameAs = settings.socialLinks.map((s) => s.url);
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -38,7 +48,7 @@ export function organizationGraph(settings: SiteSettings, members: Member[]) {
         "@id": ORG_ID,
         name: settings.title,
         url: siteUrl + "/",
-        logo: { "@type": "ImageObject", url: LOGO_URL },
+        logo: { "@type": "ImageObject", url: settings.logo?.url || LOGO_URL },
         telephone: settings.phoneE164,
         email: settings.email,
         address: {
@@ -47,6 +57,9 @@ export function organizationGraph(settings: SiteSettings, members: Member[]) {
           addressLocality: "Ngũ Hành Sơn, Đà Nẵng",
           addressCountry: "VN",
         },
+        ...(settings.legalName && { legalName: settings.legalName }),
+        ...(settings.taxId && { taxID: settings.taxId }),
+        ...(sameAs.length > 0 && { sameAs }),
         subOrganization: members.map((m) => ({ "@type": "Organization", name: m.name })),
       },
       { "@type": "WebSite", "@id": WEBSITE_ID, url: siteUrl + "/", name: SITE_NAME, inLanguage: "vi-VN", publisher: { "@id": ORG_ID } },
