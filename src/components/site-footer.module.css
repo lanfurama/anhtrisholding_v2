@@ -1,0 +1,106 @@
+.footer {
+  background: var(--plum);
+  color: var(--lilac);
+  overflow: hidden;
+}
+.inner {
+  padding-top: clamp(64px, 9vw, 110px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 64px);
+}
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+}
+.headline {
+  margin: 0;
+  font-weight: 750;
+  font-size: clamp(36px, 5.6vw, 84px);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  color: #fff;
+  max-width: 900px;
+}
+.cta {
+  width: clamp(128px, 15vw, 164px);
+  height: clamp(128px, 15vw, 164px);
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.25s,
+    transform 0.35s var(--ease-soft);
+}
+.cta:hover {
+  color: var(--ink);
+  background: var(--orange-hover);
+  transform: scale(1.04);
+}
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 32px;
+  padding-top: 36px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+}
+.colAddr {
+  line-height: 1.6;
+}
+.col a {
+  color: var(--lilac);
+  align-self: flex-start;
+}
+.col a:hover {
+  color: var(--orange-soft);
+}
+.colTitle {
+  color: #fff;
+  font-weight: 600;
+}
+.col .phone {
+  color: var(--orange);
+  font-weight: 600;
+}
+.wordmark {
+  display: flex;
+  font-weight: 850;
+  font-size: clamp(64px, 18vw, 260px);
+  line-height: 0.78;
+  letter-spacing: -0.06em;
+  white-space: nowrap;
+  user-select: none;
+  margin-bottom: -0.1em;
+}
+.wordmark span:first-child {
+  color: var(--plum-2);
+}
+.wordmark span:last-child {
+  color: #4a2a2a;
+}
+.bottom {
+  padding-top: 18px;
+  padding-bottom: 24px;
+  font: 500 11.5px var(--font-mono);
+  color: #9d89ad;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}

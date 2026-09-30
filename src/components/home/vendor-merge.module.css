@@ -1,0 +1,83 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.box {
+  position: relative;
+  aspect-ratio: 1.15;
+  border-radius: 9.6px;
+  background: radial-gradient(circle at 50% 50%, #f8f3fb 0, #fff 58%);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.box:hover {
+  border-color: var(--lilac-2);
+}
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid var(--orange);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  transform: scale(0);
+  pointer-events: none;
+}
+.core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  background: var(--purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 14px rgba(243, 146, 35, 0.16),
+    0 18px 40px rgba(106, 44, 145, 0.26);
+}
+.coreText {
+  font-weight: 800;
+  font-size: clamp(14px, 2vw, 22px);
+  letter-spacing: -0.04em;
+  color: #fff;
+  opacity: 0;
+  white-space: nowrap;
+}
+.pill {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 8px 13px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+.hint {
+  align-self: center;
+  font: 500 11px var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}

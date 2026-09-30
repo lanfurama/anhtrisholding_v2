@@ -1,0 +1,28 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  background: var(--plum);
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  z-index: 70;
+  animation: rv-toast 0.35s var(--ease-out);
+}
+
+.flyDot {
+  position: fixed;
+  z-index: 9999;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 5px rgba(243, 146, 35, 0.28);
+  pointer-events: none;
+}

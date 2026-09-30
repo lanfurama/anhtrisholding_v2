@@ -1,49 +1,462 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --purple: #6a2c91;
+  --purple-deep: #4f1f6d;
+  --orange: #f39223;
+  --orange-deep: #c8700f;
+  --orange-soft: #f3b36b;
+  --orange-hover: #ffab4d;
+  --ink: #1d1224;
+  --plum: #2a1238;
+  --plum-2: #3a1d4c;
+  --bg: #f3f1f5;
+  --paper: #fff;
+  --cream: #f0eee9;
+  --lilac-bg: #efe7f4;
+  --line: #e6e0ea;
+  --line-soft: #efeaf2;
+  --muted: #6f6478;
+  --muted-2: #5d5366;
+  --body: #3b3142;
+  --lilac: #d7c9e2;
+  --lilac-2: #cdbbdb;
+  --lilac-3: #b9a6c8;
+  --field-border: #e4dde8;
+  --field-bg: #faf9fb;
+  --error: #b3261e;
+
+  /* Gọi thẳng tên family (next/font nạp @font-face qua class trên <html>) thay vì var(--font-geist):
+     biến đó kèm "Geist Fallback" = Arial, khiến ký tự Geist không có (vd. "→") hiển thị bằng Arial
+     thay vì system-ui như bản thiết kế. */
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", monospace;
+  --gutter: clamp(18px, 4vw, 40px);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-reveal: cubic-bezier(0.77, 0, 0.18, 1);
+  --stripes-purple: repeating-linear-gradient(135deg, #ece6f0 0 10px, #e3dbe9 10px 20px);
+  --stripes-orange: repeating-linear-gradient(135deg, #fbeee0 0 10px, #f6e2cc 10px 20px);
+  --stripes-dark: repeating-linear-gradient(135deg, #3a1d4c 0 10px, #432357 10px 20px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html {
-  height: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
-html,
 body {
-  max-width: 100vw;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Chống sao chép nội dung — theo yêu cầu thiết kế (xem CopyGuard). */
+.site {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.site input,
+.site textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.site img {
+  -webkit-user-drag: none;
 }
 
 a {
-  color: inherit;
+  color: var(--purple);
   text-decoration: none;
 }
+a:hover {
+  color: var(--orange-deep);
+}
+input,
+textarea,
+button {
+  font-family: inherit;
+}
+::selection {
+  background: var(--orange);
+  color: var(--ink);
+}
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Type ---------- */
+.eyebrow {
+  font: 500 12px var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--purple);
+}
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+.h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(34px, 4.6vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.display {
+  margin: 0;
+  font-weight: 750;
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+.lede {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--muted-2);
+}
+.cP {
+  color: var(--purple);
+}
+.cO {
+  color: var(--orange);
+}
+.cOD {
+  color: var(--orange-deep);
+}
+.linkStrong {
+  font-weight: 600;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.btnSm {
+  height: 50px;
+  padding: 0 20px;
+  font-size: 14.5px;
+}
+.btnPrimary {
+  background: var(--purple);
+  color: #fff;
+}
+.btnPrimary:hover {
+  background: var(--purple-deep);
+  color: #fff;
+}
+.btnOutline {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.btnOutline:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.btnAccent {
+  background: var(--orange);
+  color: var(--ink);
+}
+.btnAccent:hover {
+  background: var(--orange-hover);
+  color: var(--ink);
+}
+.btnInk {
+  background: var(--ink);
+  color: #fff;
+}
+.btnInk:hover {
+  background: var(--plum);
+  color: #fff;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--purple);
+  color: var(--purple);
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background-color 0.25s,
+    color 0.25s;
+}
+.chip:hover {
+  background: var(--purple);
+  color: #fff;
+}
+
+/* ---------- Cards ---------- */
+.postCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 7.2px;
+  padding: 10px 10px 20px;
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+.postCard:hover {
+  color: var(--ink);
+  border-color: var(--purple);
+}
+.postCard:hover .postMedia img {
+  transform: scale(1.03);
+}
+.postMedia {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 4.8px;
+  overflow: hidden;
+  background: #ece6f0;
+}
+.postMedia img {
+  object-fit: cover;
+  transition:
+    transform 1.2s var(--ease-soft),
+    opacity 0.7s var(--ease-out);
+}
+.postBody {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.postMeta {
+  font: 500 11.5px var(--font-mono);
+  color: var(--muted);
+}
+.postTitle {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+.postLede {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 12px var(--font-mono);
+  text-align: center;
+  padding: 12px;
+}
+.phPurple {
+  background: var(--stripes-purple);
+  color: var(--purple);
+}
+.phOrange {
+  background: var(--stripes-orange);
+  color: #9a5410;
+}
+.phDark {
+  background: var(--stripes-dark);
+  color: var(--lilac-2);
+}
+
+/* Ảnh mờ dần khi tải xong (fadeImgs trong bản thiết kế) */
+.fadeImg {
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-out);
+}
+.fadeImg[data-loaded="1"] {
+  opacity: 1;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Reveal (chỉ các hiệu ứng đang bật trong bản thiết kế) ---------- */
+@keyframes rv-fromL {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
+  }
+}
+@keyframes rv-fromR {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+    clip-path: inset(0% 0 0 0);
+  }
+}
+@keyframes rv-track {
+  from {
+    clip-path: inset(0 50% 0 50%);
+  }
+  to {
+    clip-path: inset(0 0% 0 0%);
+  }
+}
+@keyframes rv-clip {
+  from {
+    clip-path: inset(0 50% 0 50% round 10.2px);
+    transform: scale(1.04);
+  }
+  to {
+    clip-path: inset(0 0% 0 0% round 10.2px);
+    transform: scale(1);
+  }
+}
+@keyframes rv-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+}
+@keyframes rv-toast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.96);
+  }
+}
+.rvFromL {
+  animation: rv-fromL 1.5s var(--ease-reveal) backwards;
+}
+.rvFromR {
+  animation: rv-fromR 1.5s var(--ease-reveal) 0.2s backwards;
+}
+.rvTrack {
+  animation: rv-track 1.3s var(--ease-reveal) 0.48s backwards;
+}
+.rvClip {
+  animation: rv-clip 1.8s var(--ease-reveal) backwards;
+}
+.rvShake {
+  animation: rv-shake 0.42s ease-in-out;
+}
+
+/* ---------- View transitions giữa các trang ("Mờ dần") ---------- */
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: scale(1.012);
+  }
+}
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(.page-out) {
+  animation: vt-out 320ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+::view-transition-new(.page-in) {
+  animation: vt-in 620ms var(--ease-out) 60ms both;
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
   }
 }
