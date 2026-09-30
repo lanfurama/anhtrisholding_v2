@@ -58,7 +58,23 @@ async function redirect(path, target) {
 async function main() {
   await waitReady();
 
-  const home = await page("/", 200, [/<h1/, /"@type":"Organization"/, /"@type":"FAQPage"/, /href="\/blogs\/news"/]);
+  const home = await page("/", 200, [
+    /<h1/,
+    /"@type":"Organization"/,
+    /"@type":"FAQPage"/,
+    /href="\/blogs\/news"/,
+    /<link rel="icon" href="\/icon\.svg/,
+    /<link rel="apple-touch-icon"/,
+    /<link rel="manifest" href="\/manifest\.webmanifest"/,
+  ]);
+  for (const [path, type] of [
+    ["/favicon.ico", "image/x-icon"],
+    ["/manifest.webmanifest", "application/manifest+json"],
+    ["/icons/icon-512.png", "image/png"],
+  ]) {
+    const res = await get(path);
+    check(`${path} → 200 ${type}`, res.status === 200 && (res.headers.get("content-type") || "").startsWith(type), `nhận ${res.status} ${res.headers.get("content-type")}`);
+  }
   for (const path of ["/pages/he-sinh-thai", "/collections/all", "/pages/du-an", "/blogs/news", "/robots.txt", "/studio"]) {
     await page(path, 200);
   }
