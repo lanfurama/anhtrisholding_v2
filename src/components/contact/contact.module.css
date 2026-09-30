@@ -79,6 +79,11 @@
   font-size: 15px;
   line-height: 1.6;
 }
+.showroom a {
+  /* Vùng chạm cao hơn dòng chữ, bố cục giữ nguyên */
+  padding-block: 6px;
+  margin-block: -6px;
+}
 .showroomName {
   font-weight: 600;
 }

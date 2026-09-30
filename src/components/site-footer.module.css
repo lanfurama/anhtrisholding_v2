@@ -44,7 +44,11 @@
 .cta:hover {
   color: var(--ink);
   background: var(--orange-hover);
-  transform: scale(1.04);
+}
+@media (hover: hover) {
+  .cta:hover {
+    transform: scale(1.04);
+  }
 }
 .cols {
   display: grid;
@@ -65,6 +69,9 @@
 .col a {
   color: var(--lilac);
   align-self: flex-start;
+  /* Vùng chạm 28px (chữ 18px) — padding bù bằng margin âm nên khoảng cách giữ nguyên */
+  padding-block: 5px;
+  margin-block: -5px;
 }
 .col a:hover {
   color: var(--orange-soft);

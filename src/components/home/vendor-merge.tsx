@@ -121,7 +121,8 @@ export function VendorMerge() {
   const [merged, setMerged] = useState(false);
   const mergedRef = useRef(false);
   const hoverT = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const desktop = useMedia("(min-width: 960px)");
+  // Theo khả năng hover chứ không theo độ rộng: iPad ngang / laptop cảm ứng dùng chạm, không có "rê chuột"
+  const canHover = useMedia("(hover: hover) and (pointer: fine)");
 
   // Cuộn tới → tự gom về AnhTris
   useEffect(() => {
@@ -167,7 +168,7 @@ export function VendorMerge() {
     hoverT.current = setTimeout(fn, ms);
   };
 
-  const hint = desktop
+  const hint = canHover
     ? merged
       ? "Rê chuột để xem trước đây"
       : "Rời chuột để gom về AnhTris"
@@ -184,9 +185,9 @@ export function VendorMerge() {
         tabIndex={0}
         aria-pressed={merged}
         aria-label="Minh hoạ: các nhà cung ứng rời rạc gom về một đối tác AnhTris"
-        onMouseEnter={() => desktop && later(() => setMerged(false), 70)}
-        onMouseLeave={() => desktop && later(() => setMerged(true), 140)}
-        onClick={() => !desktop && setMerged((m) => !m)}
+        onMouseEnter={() => canHover && later(() => setMerged(false), 70)}
+        onMouseLeave={() => canHover && later(() => setMerged(true), 140)}
+        onClick={() => !canHover && setMerged((m) => !m)}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();

@@ -31,7 +31,7 @@ export function ProductCatalog({ categories, products, cat }: Props & { cat: str
 
   return (
     <>
-      <div className={c.filters} role="toolbar" aria-label="Lọc theo danh mục">
+      <div className={c.filters} role="group" aria-label="Lọc theo danh mục">
         {filters.map((f) => (
           <button key={f.slug} type="button" aria-pressed={active === f.slug} className={c.filter} onClick={() => setCat(f.slug)}>
             {f.label}

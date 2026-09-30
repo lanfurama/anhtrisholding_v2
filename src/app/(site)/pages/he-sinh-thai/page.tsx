@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { FadeImage } from "@/components/effects";
 import { PageTransition } from "@/components/page-transition";
 import p from "@/components/pages.module.css";
@@ -34,7 +35,7 @@ export default async function EcosystemPage() {
 
       <section className={`container ${p.stackCards}`}>
         {members.map((m, i) => (
-          <article key={m._id} id={m.slug} className={`${p.memberCard} ${p[m.theme]}`} style={{ top: 96 + i * 20 }}>
+          <article key={m._id} id={m.slug} className={`${p.memberCard} ${p[m.theme]}`} style={{ "--stack": i } as CSSProperties}>
             <div className={p.memberCopy}>
               <div className={p.memberLogo}>
                 {m.logo && <FadeImage src={m.logo.url} alt={m.logo.alt || `Logo ${m.name}`} fill sizes="120px" />}

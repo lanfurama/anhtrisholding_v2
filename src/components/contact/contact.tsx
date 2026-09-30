@@ -57,6 +57,12 @@ export function QuoteForm({ interests }: { interests: string[] }) {
     if (focusErr) formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
   }, [focusErr]);
 
+  // Form biến mất sau khi gửi — chuyển focus tới thông báo để người dùng bàn phím/trình đọc màn hình không bị lạc
+  const sentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (sent) sentRef.current?.focus();
+  }, [sent]);
+
   const set = (k: keyof QuoteFields) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setF({ ...f, [k]: e.target.value });
     if (k in err) setErr({ ...err, [k]: undefined });
@@ -86,7 +92,7 @@ export function QuoteForm({ interests }: { interests: string[] }) {
 
   if (sent) {
     return (
-      <div className={c.sent} role="status">
+      <div ref={sentRef} tabIndex={-1} className={c.sent} role="status">
         <span className={c.sentMark} aria-hidden="true">
           ✓
         </span>

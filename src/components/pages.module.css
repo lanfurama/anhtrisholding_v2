@@ -15,13 +15,21 @@
   gap: 16px;
 }
 .memberCard {
-  position: sticky;
+  position: relative;
   border-radius: 9.6px;
   padding: clamp(24px, 4vw, 48px);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: 28px 48px;
   scroll-margin-top: 96px;
+}
+/* Thẻ xếp chồng khi cuộn — chỉ bật khi màn hình đủ cao để thấy trọn một thẻ.
+   Trên điện thoại thẻ cao hơn màn hình: thẻ sau sẽ che mất dịch vụ và nút của thẻ trước. */
+@media (min-width: 1024px) and (min-height: 700px), (min-width: 768px) and (min-height: 900px) {
+  .memberCard {
+    position: sticky;
+    top: calc(96px + var(--stack, 0) * 20px);
+  }
 }
 .memberCopy {
   display: flex;

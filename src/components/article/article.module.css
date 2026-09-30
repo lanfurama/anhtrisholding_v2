@@ -25,6 +25,8 @@
 }
 .crumbs a {
   color: var(--muted);
+  padding-block: 8px;
+  margin-block: -8px;
 }
 .crumbs a:hover {
   color: var(--purple);
@@ -85,6 +87,8 @@
   font-weight: 600;
   font-size: 15px;
   color: var(--ink);
+  padding-block: 6px;
+  margin-block: -6px;
 }
 .authorName:hover {
   color: var(--purple);
